@@ -1,0 +1,195 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Strict//EN" "http://w3.org">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>iDevice Jailbreak Tool - Proportions Fixed</title>
+    <style type="text/css">
+        html, body {
+            margin: 0;
+            padding: 0;
+            background-color: #000000;
+            color: #ffffff;
+            font-family: "Courier New", Courier, monospace;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .screen {
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .console-log {
+            font-size: 11px;
+            color: #00ff00;
+            line-height: 14px;
+            height: 140px;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+
+        .loading-zone {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        /* Контейнер расширен под новые пропорции */
+        .logo-container {
+            margin: 0 auto 35px auto;
+            width: 55px;
+            height: 65px;
+            position: relative;
+        }
+
+        /* Левая половинка: шире на 2.5px */
+        .apple-left {
+            width: 34px;
+            height: 41px;
+            background-color: #ffffff;
+            border-radius: 19px 16px 17px 19px;
+            position: absolute;
+            bottom: 0;
+            left: 2px;
+        }
+
+        /* Правая половинка: шире на 2.5px, смещена для стыка и закруглена ровнее */
+        .apple-right {
+            width: 34px;
+            height: 41px;
+            background-color: #ffffff;
+            border-radius: 17px 19px 19px 17px;
+            position: absolute;
+            bottom: 0;
+            right: 1px;
+        }
+
+        /* Вырез для укуса адаптирован под новую ширину */
+        .apple-bite-fixed {
+            width: 16px;
+            height: 16px;
+            background-color: #000000;
+            border-radius: 50%;
+            position: absolute;
+            top: 32px;
+            right: -7px;
+            z-index: 5;
+        }
+
+        /* Листочек отцентрирован по новой ширине яблока */
+        .apple-leaf-fixed {
+            width: 16px;
+            height: 11px;
+            background-color: #ffffff;
+            border-radius: 11px 0 11px 0;
+            position: absolute;
+            top: 11px;
+            left: 27px;
+        }
+
+        .progress-container {
+            width: 240px;
+            height: 8px;
+            border: 1px solid #333333;
+            background-color: #111111;
+            margin: 0 auto;
+            position: relative;
+            text-align: left;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 8px;
+            background-color: #ffffff;
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: #8e8e93;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="screen">
+        <div class="console-log" id="console">
+            [*] Waiting for iPhone 4S (iPhone4,1)...<br>
+            [*] Device detected in DFU mode.<br>
+            [*] Exploiting with limera1n / kloader...<br>
+            [*] Preparing filesystem for iOS 12 environment...<br>
+            [*] Emulating iOS 12 core components...
+        </div>
+
+        <div class="loading-zone">
+            <!-- Обновленное и расширенное CSS-яблоко -->
+            <div class="logo-container">
+                <div class="apple-leaf-fixed"></div>
+                <div class="apple-left"></div>
+                <div class="apple-right"></div>
+                <div class="apple-bite-fixed"></div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressFill"></div>
+            </div>
+            
+            <div class="status-text" id="statusLabel">Installing iOS 12...</div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var totalTimeMs = 9 * 60 * 1000; 
+        var tickIntervalMs = 1000;       
+        var elapsedTimeMs = 0;
+        var loopCount = 1; 
+
+        var jailbreakSteps = [
+            "Installing iOS 12 components...",
+            "Patching kernel for iOS 12 compatibility...",
+            "Bypassing AMFI restrictions...",
+            "Remounting rootfs as read-write...",
+            "Injecting iOS 12 untether exploit...",
+            "Extracting custom Cydia package...",
+            "Fixing permissions on /private/var/stash...",
+            "Stashing iOS 12 modified applications...",
+            "Generating Cydia caches...",
+            "Finalizing iOS 12 installation...",
+            "Rebooting into pwned iOS 12..."
+        ];
+
+        var progressBar = document.getElementById("progressFill");
+        var statusLabel = document.getElementById("statusLabel");
+        var consoleLog = document.getElementById("console");
+
+        function updateLoading() {
+            elapsedTimeMs += tickIntervalMs;
+            
+            var percentage = (elapsedTimeMs / totalTimeMs) * 100;
+
+            if (percentage >= 100) {
+                percentage = 0;
+                elapsedTimeMs = 0; 
+                loopCount++;       
+                consoleLog.innerHTML = "[*] Soft reboot triggered...<br>[*] Restarting iOS 12 installation (Loop " + loopCount + ")...";
+            }
+
+            progressBar.style.width = percentage + "%";
+
+            var stepIndex = Math.floor((percentage / 100) * jailbreakSteps.length);
+            if (stepIndex >= jailbreakSteps.length) stepIndex = jailbreakSteps.length - 1;
+            
+            var currentStep = jailbreakSteps[stepIndex];
+            
+            if (statusLabel.innerHTML !== currentStep) {
+                statusLabel.innerHTML = currentStep;
+                consoleLog.innerHTML += "<br>[+] " + currentStep;
+                consoleLog.scrollTop = consoleLog.scrollHeight;
+            }
+        }
+
+        var loadingInterval = setInterval(updateLoading, tickIntervalMs);
+    </script>
+
+</body>
+</html>
